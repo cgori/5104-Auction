@@ -39,7 +39,8 @@ public class Auction implements Blockable{
     }
 
     public void close() {
-
+    	status = statusType.EXPIRED;
+    	System.err.print("The item: "+ itemForSale.getDescription() + " has expired");
     }
 
     public synchronized boolean isBlocked() {
