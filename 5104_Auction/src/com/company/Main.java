@@ -2,6 +2,7 @@ package com.company;
 
 public class Main {
     public static void main(String[] args) {
-    	new SysAuction();
+    	SysAuction system = new SysAuction();
+    	system.run();
     }
 }
