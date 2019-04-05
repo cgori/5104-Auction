@@ -26,7 +26,11 @@ public class Auction implements Blockable{
 
     }
 
-    public void placeBid() {
+    public Auction() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public void placeBid() {
 
     }
 
