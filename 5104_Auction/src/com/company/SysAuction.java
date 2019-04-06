@@ -180,23 +180,26 @@ public class SysAuction {
 			}
 		}
 		if (auctionsAvalibleToVerify) {
-			System.out.println("Please Select Auction to verify");
+			System.out.println("Please select an auction to verify");
 			String choice = r.nextLine();
 			if (listOfAuctions.get(Integer.parseInt(choice)).getWho().equals(loggedInSeller)) {
 				listOfAuctions.get(Integer.parseInt(choice)).setStatus(statusType.ACTIVE);
 			}
 		} else {
-			System.out.println("No Auction Avalible to veridy");
+			System.err.println("No auctions available");
 		}
 	}
 
 	private void startNewAuction() {
+		if(loggedInSeller.getItemsForSale().size()>1) {
 		System.out.println("Please Select An Item For Sale: ");
 		for (Item item : loggedInSeller.getItemsForSale()) {
 			System.out.println(item.getID() + "| " + item.getDescription() + " |" + item.getitemCondition());
 		}
 		String choice = r.nextLine();
+		
 		Item newItemAuction = loggedInSeller.pickItem(Integer.parseInt(choice));
+		
 		System.out.println("dawondwadoiwandwaniowadiondwainodwaion");
 		boolean beginAuction = true;
 		for (Auction auction : listOfAuctions) {
@@ -209,6 +212,8 @@ public class SysAuction {
 		} else {
 			System.out.println("This item is already up for sale or sold");
 		}
+		}
+		System.err.println("No items created");
 	}
 
 	private void auctionDetails(Item newItemAuction) {
