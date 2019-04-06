@@ -29,7 +29,10 @@ public class SysAuction {
 	private Seller loggedInSeller;
 	private User userLog;
 	private Scanner r = new Scanner(System.in);
-
+	private int userInterval = 500;
+	private int auctionInterval = 200;
+	private UserUpdates updates = new UserUpdates();
+	private ValidateAuction w = new ValidateAuction();
 //TODO add Active auctions all pending due to not being verified
 	public SysAuction() {
 		listOfUsers.add(new Seller("Callum", "Test"));
@@ -39,23 +42,21 @@ public class SysAuction {
 		listOfUsers.add(new Buyer("LOL", "xd"));
 		listOfUsers.add(new Buyer("temp", "xd"));
 
-		/*listOfAuctions.add(new Auction(7.50, 25.00, new Date(System.currentTimeMillis() + 25000L),
-				(Seller) listOfUsers.get(0), new Item("Car", condition.NEW)));
-		listOfAuctions.add(new Auction(5.99, 20.00, new Date(System.currentTimeMillis() + 20000L),
-				(Seller) listOfUsers.get(2), new Item("Boat", condition.NEW)));
-		listOfAuctions.add(new Auction(3.00, 10.00, new Date(System.currentTimeMillis() + 15000L),
-				(Seller) listOfUsers.get(2), new Item("Bike", condition.USED)));
-		listOfAuctions.add(new Auction(1.00, 5.00, new Date(System.currentTimeMillis() + 10000L),
-				(Seller) listOfUsers.get(3), new Item("Diamonds", condition.NEW)));
-		listOfAuctions.add(new Auction(0.99, 1.00, new Date(System.currentTimeMillis() + 8000L),
-				(Seller) listOfUsers.get(1), new Item("Iron", condition.NEW)));
-		listOfAuctions.add(new Auction(2.59, 2.60, new Date(System.currentTimeMillis() + 5000L),
-				(Seller) listOfUsers.get(0), new Item("Coal", condition.USED)));
+		listOfAuctions.add(new Auction(7.50, 25.00, new Date(System.currentTimeMillis() + 123L),
+				(Seller) listOfUsers.get(0), new Item("Car", condition.NEW, 123123123), 23132));
+		listOfAuctions.add(new Auction(7.50, 25.00, new Date(System.currentTimeMillis() + 2500L),
+				(Seller) listOfUsers.get(0), new Item("Car", condition.NEW, 123123123), 23132));
+		listOfAuctions.add(new Auction(7.50, 25.00, new Date(System.currentTimeMillis() + 10000L),
+				(Seller) listOfUsers.get(0), new Item("Car", condition.NEW, 123123123), 23132));
+		listOfAuctions.add(new Auction(7.50, 25.00, new Date(System.currentTimeMillis() + 19000L),
+				(Seller) listOfUsers.get(0), new Item("Car", condition.NEW, 123123123), 23132));
+		listOfAuctions.add(new Auction(7.50, 25.00, new Date(System.currentTimeMillis() + 35000L),
+				(Seller) listOfUsers.get(0), new Item("Car", condition.NEW, 123123123), 23132));
 
-		listOfAuctions.get(5).placeBid(0.30, (Buyer) listOfUsers.get(4), new Date(System.currentTimeMillis()));
-		listOfAuctions.get(4).placeBid(0.10, (Buyer) listOfUsers.get(4), new Date(System.currentTimeMillis()));*/
+		listOfAuctions.get(2).placeBid(0.30, (Buyer) listOfUsers.get(4), new Date(System.currentTimeMillis()));
+		listOfAuctions.get(1).placeBid(0.10, (Buyer) listOfUsers.get(4), new Date(System.currentTimeMillis()));
 
-		ValidateAuction w = new ValidateAuction();
+		
 		w.start();
 		String select;
 
@@ -64,6 +65,7 @@ public class SysAuction {
 			 * Date e = new Date(); Date x = new Date(2009 - 12 - 31);
 			 * System.out.print(e.compareTo(x));
 			 */
+		
 			System.out.println("=============================================================================");
 			System.out.println("                          Guest Menu");
 			System.out.println("=============================================================================");
@@ -84,8 +86,25 @@ public class SysAuction {
 				createAccount();
 				break;
 			case "4":
-				// TODO Change update interval
-				break;
+				System.out.println("Select the thread you wish to change the update interval on");
+				System.out.println("1. User Updates");
+				System.out.println("2. Back");
+				select = r.nextLine();
+				
+				switch(select) {
+				
+				case "1":
+					System.out.print("Interval (milliseconds):");
+					auctionInterval = r.nextInt();
+					r.nextLine();
+					System.err.println("Auction Validator interval is now " + auctionInterval);
+					break;
+				case "2":
+					break;
+				}
+			
+				
+			
 
 			}
 
@@ -100,7 +119,31 @@ public class SysAuction {
 		String password = r.nextLine();
 		verifyLogin(userName, password);
 	}
-
+	
+	private void changeInterval() {
+		System.out.println("Select the thread you wish to change the update interval on");
+		System.out.println("1. User Updates");
+		System.out.println("2. Auction Validator (requires user to be logged in)");
+		String select = r.nextLine();
+		
+		switch(select) {
+		case "1":
+			System.out.print("Interval (milliseconds):");
+			auctionInterval = r.nextInt();
+			r.nextLine();
+			System.err.println("Auction Validator interval is now " + auctionInterval);
+			break;
+		
+		
+		case "2":
+			System.out.print("Interval (milliseconds):");
+			userInterval = r.nextInt();
+			r.nextLine();
+			System.err.println("User Update interval is now " + userInterval);
+			break;
+		
+		}
+	}
 	private void createAccount() {
 		System.out.println("Please Enter your username: ");
 		String userName = r.nextLine();
@@ -121,8 +164,7 @@ public class SysAuction {
 	}
 
 	public void verifyLogin(String userName, String password) {
-		userUpdates updates = new userUpdates();
-		for (User user : listOfUsers) {
+				for (User user : listOfUsers) {
 			if (user.checkusername(userName) == true && user.checkPassword(password) == true) {
 				try {
 					this.loggedInSeller = (Seller) user;
@@ -152,7 +194,8 @@ public class SysAuction {
 			System.out.println("1. Add Item");
 			System.out.println("2. Start Auction");
 			System.out.println("3. verify Auction");
-			System.out.println("4. Logout");
+			System.out.println("4. Change interval");
+			System.out.println("5. Logout");
 			select = r.nextLine();
 			switch (select) {
 			case "1":
@@ -164,9 +207,13 @@ public class SysAuction {
 			case "3":
 				verifyAuction();
 				break;
+			
+		case "4":
+			changeInterval();
+			break;
 			}
 
-		} while (!select.equalsIgnoreCase("4"));
+		} while (!select.equalsIgnoreCase("5"));
 		loggedInSeller.setLoggedIn(false);
 		loggedInSeller = null;
 	}
@@ -184,6 +231,7 @@ public class SysAuction {
 			String choice = r.nextLine();
 			if (listOfAuctions.get(Integer.parseInt(choice)).getWho().equals(loggedInSeller)) {
 				listOfAuctions.get(Integer.parseInt(choice)).setStatus(statusType.ACTIVE);
+				System.err.println("Auction is now listed");
 			}
 		} else {
 			System.err.println("No auctions available");
@@ -191,7 +239,7 @@ public class SysAuction {
 	}
 
 	private void startNewAuction() {
-		if(loggedInSeller.getItemsForSale().size()>1) {
+		if(loggedInSeller.getItemsForSale().size()>=1) {
 		System.out.println("Please Select An Item For Sale: ");
 		for (Item item : loggedInSeller.getItemsForSale()) {
 			System.out.println(item.getID() + "| " + item.getDescription() + " |" + item.getitemCondition());
@@ -213,7 +261,7 @@ public class SysAuction {
 			System.out.println("This item is already up for sale or sold");
 		}
 		}
-		System.err.println("No items created");
+		
 	}
 
 	private void auctionDetails(Item newItemAuction) {
@@ -224,19 +272,19 @@ public class SysAuction {
 		double reservePrice = r.nextDouble();
 		r.nextLine();
 		System.out.println("Please enter Closing Date: ");
-		System.out.println("Format: dd/mm/yyyy/h/s");
-		System.out.println("Format: 08/04/2019/13/10");
+		System.out.println("Example: 2009-12-31 23:59");
 		String stringClosingDate = r.nextLine();
-		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy/H/m", Locale.UK);
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.UK);
 		Date closingDate = null;
 		try {
 			// Parsing the String
 			closingDate = dateFormat.parse(stringClosingDate);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("Not a valid date format.");
 		}
 		listOfAuctions.add(new Auction(startPrice, reservePrice, closingDate, loggedInSeller, newItemAuction,listOfAuctions.size()));
+		System.err.println("Auction is now pending.");
 	}
 
 	private void newSellerItem() {
@@ -251,36 +299,18 @@ public class SysAuction {
 		case "1":
 			itemCondition = condition.NEW;
 			break;
-		case "3":
+		case "2":
 			itemCondition = condition.USED;
 			break;
 		}
 		loggedInSeller.addItem(itemDesc, itemCondition);
+		System.err.println("Item created");
 	}
 
 //TODO fix this doesnt work when takes params on start you use start which it doesnt let me
 	// This will tell the user about updates on the account e.g. if they won an
 	// auction or lost one :P
-	class userUpdates extends Thread {
-		public void run() {
-			while (userLog.isLoggedIn()) {
-				if (userLog.checkUpdates() == true) {
-					ArrayList<String> temp = userLog.browseUpdates();
-					int i = 1;
-					for (String update : temp) {
-						System.err.println("Update: " + i + ": " + update);
-						i++;
-					}
-				}
-				try {
-					Thread.sleep(500);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-
-			}
-		}
-	}
+	
 
 	public void buyerMenu() {
 		System.out.println("=============================================================================");
@@ -292,7 +322,8 @@ public class SysAuction {
 			System.out.println("1. Browse Auctions");
 			System.out.println("2. Place Bid");
 			System.out.println("3. Browse Winnings");
-			System.out.println("4. Logout");
+			System.out.println("4. Change interval");
+			System.out.println("5. Logout");
 			select = r.nextLine();
 			switch (select) {
 			case "1":
@@ -309,9 +340,13 @@ public class SysAuction {
 					System.out.println(loggedInBuyer.getUserName() + ": Has no winnings");
 				}
 				break;
+			
+			case "4":
+				changeInterval();
+				break;
 			}
 
-		} while (!select.equalsIgnoreCase("4"));
+		} while (!select.equalsIgnoreCase("5"));
 		loggedInBuyer.setLoggedIn(false);
 		loggedInBuyer = null;
 
@@ -344,6 +379,30 @@ public class SysAuction {
 		double amount = r.nextDouble();
 		bidchoice.placeBid(amount, loggedInBuyer, new Date(System.currentTimeMillis()));
 	}
+	
+	
+	//threads
+	
+	class UserUpdates extends Thread {
+		public void run() {
+			while (userLog.isLoggedIn()) {
+				if (userLog.checkUpdates() == true) {
+					ArrayList<String> temp = userLog.browseUpdates();
+					int i = 1;
+					for (String update : temp) {
+						System.err.println("Update: " + i + ": " + update);
+						i++;
+					}
+				}
+				try {
+					Thread.sleep(userInterval);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+
+			}
+		}
+	}
 
 	class ValidateAuction extends Thread {
 		public void run() {
@@ -351,7 +410,7 @@ public class SysAuction {
 				listOfAuctions.stream().filter(y -> y.getClosingDate().before(new Date()))
 						.filter(y -> y.getStatus() != statusType.EXPIRED).forEach(y -> y.close());
 				try {
-					Thread.sleep(200);
+					Thread.sleep(auctionInterval);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
