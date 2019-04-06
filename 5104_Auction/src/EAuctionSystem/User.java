@@ -45,13 +45,17 @@ public abstract class User {
     public void setLoggedIn(boolean temp) {
     	this.loggedIn=temp;
     }
-    public ArrayList<String> checkUpdates() {
-    	if(!this.updates.isEmpty()) {
-    		ArrayList<String> temp=this.updates;
-    		this.updates.clear();
-    		return temp;
+    public boolean checkUpdates() {
+    	if(this.updates.isEmpty()) {
+    		return false;
+    	}else {
+    		return true;
     	}
-    	return null;
+    	}
+    public ArrayList<String> browseUpdates(){
+    	ArrayList<String> temp = new ArrayList<String>(this.updates);
+		this.updates.clear();
+		return temp;
     }
     public void addUpdate(String update) {
     	updates.add(update);

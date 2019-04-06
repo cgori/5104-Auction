@@ -33,4 +33,7 @@ public class Seller extends User {
 	public List<Item> getItemsForSale() {
 		return this.itemsForSale;
 	}
+	public void itemExpired(String update) {
+		this.addUpdate(update);
+	}
 }

@@ -30,11 +30,7 @@ public class Auction implements Blockable{
 		if(amount>=this.lowerInc && amount<=this.upperInc) {
 			this.currentPrice += amount;
 			listOfBidders.add(new Bid(currentPrice,who,when));
-			
-			
 		}else {
-			System.out.println("nam");
-			System.out.println(this.lowerInc + " " + this.upperInc);
 		}
 		
 		
@@ -43,32 +39,26 @@ public class Auction implements Blockable{
     public void close() {
     	if(currentPrice >= reservePrice ) {
 			System.err.println("The item " +itemForSale.getDescription() + " has sold.");
+			who.itemExpired(this.itemForSale.getDescription()+ ": Sold For " +this.currentPrice);
     	}else {
     		System.err.println("The item " +itemForSale.getDescription() + " has expired.");
-    		System.out.println(currentPrice + " " + reservePrice);
-    		
-			
-		
+    		who.itemExpired(this.itemForSale.getDescription()+ ": Expired");
     	}
     	status = statusType.EXPIRED;
-    	
     	checkWinner();
     }
     
     private Bid getHighestBid(){
     	return listOfBidders.get(listOfBidders.size()-1);
-    	
     }
 
     private void checkWinner() {
-		for (Bid bid : listOfBidders) {
-			if(bid.getAmount()>=reservePrice) {
-				expired(bid.getWho());
+    	if(!listOfBidders.isEmpty()&&listOfBidders.get(listOfBidders.size()-1).getAmount()>=reservePrice) {
+				expired(listOfBidders.get(listOfBidders.size()-1).getWho());
 			}else {
 				expired(listOfBidders);
 			}
 		}
-	}
 	private void expired(List<Bid>listOfBidders) {
 		String temp = "Sorry but the item you bidded for has expired: " +this.itemForSale.getDescription();
 		for (Bid bid : listOfBidders) {
@@ -161,6 +151,13 @@ public class Auction implements Blockable{
     public String toString() {
     	String temp = "|Expires: "+this.closingDate + "|Desc: " + this.itemForSale.getDescription() +"|Condition: "+ this.itemForSale.getitemCondition();
     	return temp;
+    }
+    public String toString1() {
+    	String temp = "|Expired: "+this.closingDate + "|Desc: " + this.itemForSale.getDescription() +"|Condition: "+ this.itemForSale.getitemCondition() +"|Price: "+ this.currentPrice ;
+    	return temp;
+    }
+    public double getCurrentPrice() {
+    	return this.currentPrice;
     }
 }
 

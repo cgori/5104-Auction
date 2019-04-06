@@ -12,10 +12,15 @@ public class Buyer extends User {
 	}
 
 	public ArrayList<Auction> browseWinnings() {
+		if(listOfWinnings.isEmpty()) {
+			return null;
+		}else {
 		return this.listOfWinnings;
+		}
 	}
 	
 	public void auctionWon(Auction won) {
+		this.addUpdate("You Won! ON: "+ won.getItemForSale().getDescription() + " For: " + won.getCurrentPrice() + " When: " + won.getClosingDate());
 		listOfWinnings.add(won);
 	}
 
