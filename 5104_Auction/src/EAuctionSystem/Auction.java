@@ -9,10 +9,11 @@ public class Auction implements Blockable{
     private List<Bid> listOfBidders = new ArrayList<Bid>();
     private Item itemForSale;
     private Seller who;
-    private double startPirce, reservePrice,currentPrice;
+    private double startPirce, reservePrice,currentPrice = 0;
     private Date closingDate;
     private statusType status;
     private boolean blocked;
+    private Bid bid;
 
     public Auction(double startPirce, double reservePrice, Date closingDate, Seller who, Item whichItem) {
         setStatus(statusType.PENDING);
@@ -27,15 +28,36 @@ public class Auction implements Blockable{
     }
 	public void placeBid(double amount,Buyer who,Date when) {
 		if(amount>=this.lowerInc && amount<=this.upperInc) {
-			listOfBidders.add(new Bid(currentPrice+amount,who,when));
+			this.currentPrice += amount;
+			listOfBidders.add(new Bid(currentPrice,who,when));
+			
+			
+		}else {
+			System.out.println("nam");
+			System.out.println(this.lowerInc + " " + this.upperInc);
 		}
+		
 		
     }
 	
     public void close() {
+    	if(currentPrice >= reservePrice ) {
+			System.err.println("The item " +itemForSale.getDescription() + " has sold.");
+    	}else {
+    		System.err.println("The item " +itemForSale.getDescription() + " has expired.");
+    		System.out.println(currentPrice + " " + reservePrice);
+    		
+			
+		
+    	}
     	status = statusType.EXPIRED;
-    	System.out.println("The item: "+ itemForSale.getDescription() + " has expired");
+    	
     	checkWinner();
+    }
+    
+    private Bid getHighestBid(){
+    	return listOfBidders.get(listOfBidders.size()-1);
+    	
     }
 
     private void checkWinner() {
