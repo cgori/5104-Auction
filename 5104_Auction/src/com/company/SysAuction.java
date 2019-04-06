@@ -24,6 +24,7 @@ public class SysAuction {
 	private List<User> listOfUsers = new ArrayList<User>();
 	private Buyer loggedInBuyer;
 	private Seller loggedInSeller;
+	private User userLog;
 	private Scanner r = new Scanner(System.in);
 	
 	
@@ -38,14 +39,15 @@ public class SysAuction {
 		listOfUsers.add(new Buyer("LOL", "xd"));
 		listOfUsers.add(new Buyer("temp", "xd"));
 		
-		listOfAuctions.add(new Auction(7.50, 25.00, new Date(System.currentTimeMillis() + 5000L),(Seller)listOfUsers.get(0), new Item("Car", condition.NEW)));
-		listOfAuctions.add(new Auction(5.99, 20.00, new Date(System.currentTimeMillis() + 10000L),(Seller)listOfUsers.get(2), new Item("Boat", condition.NEW)));
+		listOfAuctions.add(new Auction(7.50, 25.00, new Date(System.currentTimeMillis() + 25000L),(Seller)listOfUsers.get(0), new Item("Car", condition.NEW)));
+		listOfAuctions.add(new Auction(5.99, 20.00, new Date(System.currentTimeMillis() + 20000L),(Seller)listOfUsers.get(2), new Item("Boat", condition.NEW)));
 		listOfAuctions.add(new Auction(3.00, 10.00, new Date(System.currentTimeMillis() + 15000L),(Seller)listOfUsers.get(2), new Item("Bike", condition.USED)));
-		listOfAuctions.add(new Auction(1.00, 5.00, new Date(System.currentTimeMillis() + 7500L),(Seller)listOfUsers.get(3), new Item("Diamonds", condition.NEW)));
-		listOfAuctions.add(new Auction(0.99, 9.99, new Date(System.currentTimeMillis() + 4000L),(Seller)listOfUsers.get(1), new Item("Iron", condition.NEW)));
-		listOfAuctions.add(new Auction(2.59, 2.60, new Date(System.currentTimeMillis() + 2000L),(Seller)listOfUsers.get(0), new Item("Coal", condition.USED)));
+		listOfAuctions.add(new Auction(1.00, 5.00, new Date(System.currentTimeMillis() + 10000L),(Seller)listOfUsers.get(3), new Item("Diamonds", condition.NEW)));
+		listOfAuctions.add(new Auction(0.99, 1.00, new Date(System.currentTimeMillis() + 8000L),(Seller)listOfUsers.get(1), new Item("Iron", condition.NEW)));
+		listOfAuctions.add(new Auction(2.59, 2.60, new Date(System.currentTimeMillis() + 5000L),(Seller)listOfUsers.get(0), new Item("Coal", condition.USED)));
 		
 		listOfAuctions.get(5).placeBid(0.30, (Buyer)listOfUsers.get(4), new Date(System.currentTimeMillis()));
+		listOfAuctions.get(4).placeBid(0.09, (Buyer)listOfUsers.get(4), new Date(System.currentTimeMillis()));
 		
 		ValidateAuction w = new ValidateAuction();
 		w.start();
@@ -110,31 +112,19 @@ public class SysAuction {
 		}
 	}
 
-	class ValidateAuction extends Thread {
-		public void run() {
-			while (true) {
-				listOfAuctions.stream().filter(y -> y.getClosingDate().before(new Date()))
-						.filter(y -> y.getStatus() != statusType.EXPIRED).forEach(y -> y.close());
-				try {
-					Thread.sleep(200);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
 	public void verifyLogin(String userName, String password) {
 		userUpdates updates = new userUpdates();
 		for (User user : listOfUsers) {
 			if (user.checkusername(userName) == true && user.checkPassword(password) == true) {
 				try {
 					loggedInSeller = (Seller) user;
-					updates.run(loggedInSeller);
+					loggedInSeller.setLoggedIn(true);
+					updates.start();
 					sellerMenu();
 				} catch (Exception e) {
 					loggedInBuyer = (Buyer) user;
-					updates.run(loggedInBuyer);
+					loggedInBuyer.setLoggedIn(true);
+					updates.start();
 					buyerMenu();
 				}
 			}
@@ -250,13 +240,14 @@ public class SysAuction {
 		}
 		loggedInSeller.addItem(itemDesc, itemCondition);
 	}
-
+//TODO fix this doesnt work when takes params on start you use start which it doesnt let me
+	//This will tell the user about updates on the account e.g. if they won an auction or lost one :P
 	class userUpdates extends Thread {
-		public void run(User user) {
-			while (user.isLoggedIn()) {
-				if (!user.checkUpdates().isEmpty()) {
+		public void run() {
+			while (userLog.isLoggedIn()) {
+				if (!(userLog.checkUpdates() == null)){
 					int i = 1;
-					for (String update : user.checkUpdates()) {
+					for (String update : userLog.checkUpdates()) {
 						i++;
 						System.out.println(i + ": " + update);
 					}
@@ -270,6 +261,27 @@ public class SysAuction {
 			}
 		}
 	}
+	class ValidateAuction extends Thread {
+		public void run() {
+			while (true) {
+				listOfAuctions.stream().filter(y -> y.getClosingDate().before(new Date()))
+						.filter(y -> y.getStatus() != statusType.EXPIRED).forEach(y -> y.close());
+				try {
+					Thread.sleep(200);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 
 	public void buyerMenu() {
 		System.out.println("=============================================================================");

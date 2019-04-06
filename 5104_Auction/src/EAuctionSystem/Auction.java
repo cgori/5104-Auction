@@ -40,7 +40,6 @@ public class Auction implements Blockable{
 
     private void checkWinner() {
 		for (Bid bid : listOfBidders) {
-			System.out.println(bid.getAmount() + " "+ reservePrice);
 			if(bid.getAmount()>=reservePrice) {
 				expired(bid.getWho());
 			}else {
