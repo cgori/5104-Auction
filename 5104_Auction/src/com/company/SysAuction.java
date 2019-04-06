@@ -1,5 +1,6 @@
 package com.company;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.stream.Stream;
 
@@ -36,9 +38,8 @@ public class SysAuction {
 		listOfUsers.add(new Seller("Feels", "Weird"));
 		listOfUsers.add(new Buyer("LOL", "xd"));
 		listOfUsers.add(new Buyer("temp", "xd"));
-	
 
-		listOfAuctions.add(new Auction(7.50, 25.00, new Date(System.currentTimeMillis() + 25000L),
+		/*listOfAuctions.add(new Auction(7.50, 25.00, new Date(System.currentTimeMillis() + 25000L),
 				(Seller) listOfUsers.get(0), new Item("Car", condition.NEW)));
 		listOfAuctions.add(new Auction(5.99, 20.00, new Date(System.currentTimeMillis() + 20000L),
 				(Seller) listOfUsers.get(2), new Item("Boat", condition.NEW)));
@@ -52,7 +53,7 @@ public class SysAuction {
 				(Seller) listOfUsers.get(0), new Item("Coal", condition.USED)));
 
 		listOfAuctions.get(5).placeBid(0.30, (Buyer) listOfUsers.get(4), new Date(System.currentTimeMillis()));
-		listOfAuctions.get(4).placeBid(0.10, (Buyer) listOfUsers.get(4), new Date(System.currentTimeMillis()));
+		listOfAuctions.get(4).placeBid(0.10, (Buyer) listOfUsers.get(4), new Date(System.currentTimeMillis()));*/
 
 		ValidateAuction w = new ValidateAuction();
 		w.start();
@@ -159,7 +160,7 @@ public class SysAuction {
 				break;
 			case "2":
 				startNewAuction();
-
+				break;
 			case "3":
 				verifyAuction();
 				break;
@@ -172,10 +173,9 @@ public class SysAuction {
 
 	private void verifyAuction() {
 		boolean auctionsAvalibleToVerify = false;
-		int i = 1;
 		for (Auction auction : listOfAuctions) {
-			if (auction.getWho().equals(loggedInSeller) && auction.getStatus() == statusType.EXPIRED) {
-				System.out.println(i + "| " + auction.getItemForSale().getDescription());
+			if (auction.getWho().equals(loggedInSeller) && auction.getStatus() == statusType.PENDING) {
+				System.out.println(auction.getID() + "| " + auction.getItemForSale().getDescription());
 				auctionsAvalibleToVerify = true;
 			}
 		}
@@ -184,23 +184,20 @@ public class SysAuction {
 			String choice = r.nextLine();
 			if (listOfAuctions.get(Integer.parseInt(choice)).getWho().equals(loggedInSeller)) {
 				listOfAuctions.get(Integer.parseInt(choice)).setStatus(statusType.ACTIVE);
-				;
 			}
 		} else {
 			System.out.println("No Auction Avalible to veridy");
 		}
-
 	}
 
 	private void startNewAuction() {
 		System.out.println("Please Select An Item For Sale: ");
-		int i = 1;
 		for (Item item : loggedInSeller.getItemsForSale()) {
-			System.out.println(i + "| " + item.getDescription() + " |" + item.getitemCondition());
-			i++;
+			System.out.println(item.getID() + "| " + item.getDescription() + " |" + item.getitemCondition());
 		}
 		String choice = r.nextLine();
 		Item newItemAuction = loggedInSeller.pickItem(Integer.parseInt(choice));
+		System.out.println("dawondwadoiwandwaniowadiondwainodwaion");
 		boolean beginAuction = true;
 		for (Auction auction : listOfAuctions) {
 			if (auction.getItemForSale().equals(newItemAuction)) {
@@ -222,9 +219,10 @@ public class SysAuction {
 		double reservePrice = r.nextDouble();
 		r.nextLine();
 		System.out.println("Please enter Closing Date: ");
-		System.out.println("Format: dd-mm-yyyy");
+		System.out.println("Format: dd/mm/yyyy/h/s");
+		System.out.println("Format: 08/04/2019/13/10");
 		String stringClosingDate = r.nextLine();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy/H/m", Locale.UK);
 		Date closingDate = null;
 		try {
 			// Parsing the String
@@ -233,7 +231,7 @@ public class SysAuction {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		listOfAuctions.add(new Auction(startPrice, reservePrice, closingDate, loggedInSeller, newItemAuction));
+		listOfAuctions.add(new Auction(startPrice, reservePrice, closingDate, loggedInSeller, newItemAuction,listOfAuctions.size()));
 	}
 
 	private void newSellerItem() {
@@ -262,11 +260,10 @@ public class SysAuction {
 		public void run() {
 			while (userLog.isLoggedIn()) {
 				if (userLog.checkUpdates() == true) {
-					ArrayList<String> temp =userLog.browseUpdates();
+					ArrayList<String> temp = userLog.browseUpdates();
 					int i = 1;
-					
 					for (String update : temp) {
-						System.err.println("Update: " +i + ": " + update);
+						System.err.println("Update: " + i + ": " + update);
 						i++;
 					}
 				}
@@ -316,13 +313,11 @@ public class SysAuction {
 	}
 
 	public void browseAuctions() {
-		int i = 1;
 		for (Auction auction : listOfAuctions) {
 			if (auction.getStatus().equals(statusType.ACTIVE)) {
-				System.out.println(i + " |" + auction.toString());
+				System.out.println(auction.getID() + " |" + auction.toString());
 
 			}
-			i++;
 		}
 	}
 

@@ -3,12 +3,20 @@ package EAuctionSystem;
 public class Item {
     private String description;
     private condition itempCondition;
+    private int itemID;
 
-    public Item(String desc, condition itemCondition){
+    public Item(String desc, condition itemCondition, int id){
         setDescription(desc);
         setCondition(itemCondition);
+        setID(id);
     }
-    public void setDescription(String description) {
+    private void setID(int id) {
+		this.itemID = id;		
+	}
+    public int getID() {
+    	return this.itemID;
+    }
+	public void setDescription(String description) {
         this.description = description;
     }
     public String getDescription() {

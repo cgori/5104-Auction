@@ -22,11 +22,10 @@ public class Seller extends User {
 	}
 
 	public void addItem(String desc, condition itemCondition) {
-		itemsForSale.add(new Item(desc, itemCondition));
+		itemsForSale.add(new Item(desc, itemCondition,itemsForSale.size()));
 	}
 
 	public Item pickItem(int choice) {
-		choice--;
 		return itemsForSale.get(choice);
 	}
 

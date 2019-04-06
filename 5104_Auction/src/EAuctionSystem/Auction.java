@@ -13,9 +13,9 @@ public class Auction implements Blockable{
     private Date closingDate;
     private statusType status;
     private boolean blocked;
-    private Bid bid;
+    private int uniqueID;
 
-    public Auction(double startPirce, double reservePrice, Date closingDate, Seller who, Item whichItem) {
+    public Auction(double startPirce, double reservePrice, Date closingDate, Seller who, Item whichItem,int id) {
         setStatus(statusType.PENDING);
         setStartPirce(startPirce);
         setReservePrice(reservePrice);
@@ -23,9 +23,17 @@ public class Auction implements Blockable{
         setWho(who);
         setClosingDate(closingDate);
         setUpperLowerInc();
+        setUniqueID(id);
 
 
     }
+	private void setUniqueID(int id) {
+		this.uniqueID=id;
+		
+	}
+	public int getID() {
+		return this.uniqueID;
+	}
 	public void placeBid(double amount,Buyer who,Date when) {
 		if(amount>=this.lowerInc && amount<=this.upperInc) {
 			this.currentPrice += amount;
