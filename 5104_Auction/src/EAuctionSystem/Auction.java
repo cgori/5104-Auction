@@ -5,11 +5,11 @@ import java.util.Date;
 import java.util.List;
 
 public class Auction implements Blockable{
-    private static double upperInc, lowerInc;
+    private double upperInc, lowerInc;
     private List<Bid> listOfBidders = new ArrayList<Bid>();
     private Item itemForSale;
     private Seller who;
-    private double startPirce, reservePrice;
+    private double startPirce, reservePrice,currentPrice;
     private Date closingDate;
     private statusType status;
     private boolean blocked;
@@ -25,25 +25,40 @@ public class Auction implements Blockable{
 
 
     }
-
-    public Auction() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public void placeBid() {
-
+	public void placeBid(double amount,Buyer who,Date when) {
+		if(amount>=this.lowerInc && amount<=this.upperInc) {
+			listOfBidders.add(new Bid(currentPrice+amount,who,when));
+		}
+		
     }
-
-    public void verify() {
-
-    }
-
+	
     public void close() {
     	status = statusType.EXPIRED;
-    	System.err.print("The item: "+ itemForSale.getDescription() + " has expired");
+    	System.out.println("The item: "+ itemForSale.getDescription() + " has expired");
+    	checkWinner();
     }
 
-    public synchronized boolean isBlocked() {
+    private void checkWinner() {
+		for (Bid bid : listOfBidders) {
+			System.out.println(bid.getAmount() + " "+ reservePrice);
+			if(bid.getAmount()>=reservePrice) {
+				expired(bid.getWho());
+			}else {
+				expired(listOfBidders);
+			}
+		}
+	}
+	private void expired(List<Bid>listOfBidders) {
+		String temp = "Sorry but the item you bidded for has expired: " +this.itemForSale.getDescription();
+		for (Bid bid : listOfBidders) {
+			Buyer lost = bid.getWho();
+			lost.addUpdate(temp);
+		}
+	}
+	private void expired(Buyer who) {
+		who.auctionWon(this);
+	}
+	public synchronized boolean isBlocked() {
         return blocked;
     }
 
@@ -58,10 +73,10 @@ public class Auction implements Blockable{
         upperInc = getStartPirce()*0.2;
     }
 
-    public static double getUpperInc() {
+    public double getUpperInc() {
         return upperInc;
     }
-    public static double getLowerInc() {
+    public double getLowerInc() {
         return lowerInc;
     }
   
@@ -96,6 +111,7 @@ public class Auction implements Blockable{
 
     public synchronized void setStartPirce(double startPirce) {
         this.startPirce = startPirce;
+        this.currentPrice = startPirce;
     }
 
     public synchronized double getReservePrice() {
@@ -121,11 +137,10 @@ public class Auction implements Blockable{
     public synchronized void setStatus(statusType status) {
         this.status = status;
     }
-
-	
-	
-
-
+    public String toString() {
+    	String temp = "|Expires: "+this.closingDate + "|Desc: " + this.itemForSale.getDescription() +"|Condition: "+ this.itemForSale.getitemCondition();
+    	return temp;
+    }
 }
 
 

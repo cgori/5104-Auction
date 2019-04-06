@@ -4,14 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Buyer extends User {
-    public Buyer(String userName,String password){
+	private ArrayList<Auction> listOfWinnings = new ArrayList<Auction>();
 
-        super(userName,password);
-    }
-    private List<Auction> wonAuctions = new ArrayList<Auction>();
+	public Buyer(String userName, String password) {
 
-    public void victory(){
+		super(userName, password);
+	}
 
-    }
+	public ArrayList<Auction> browseWinnings() {
+		return this.listOfWinnings;
+	}
+	
+	public void auctionWon(Auction won) {
+		listOfWinnings.add(won);
+	}
 
 }
