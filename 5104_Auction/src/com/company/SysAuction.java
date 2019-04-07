@@ -42,6 +42,8 @@ public class SysAuction {
 	public SysAuction() {
 		deserialize();
 		
+		
+		//LIST OF ALL USERS TESTING
 		/*listOfUsers.add(new Seller("Callum", "Test"));
 		listOfUsers.add(new Seller("Robert", "Harrison"));
 		listOfUsers.add(new Seller("Callum", "Goring"));
@@ -49,6 +51,7 @@ public class SysAuction {
 		listOfUsers.add(new Buyer("LOL", "xd"));
 		listOfUsers.add(new Buyer("temp", "xd"));*/
 
+		//LIST OF ALL AUCTIONS TESTING
 		listOfAuctions.add(new Auction(25.00, 26.00, new Date(System.currentTimeMillis() + 35000L),
 				(Seller) listOfUsers.get(0), new Item("Car", condition.NEW, 20), listOfAuctions.size()));
 		listOfAuctions.add(new Auction(15.00, 20.00, new Date(System.currentTimeMillis() + 20000L),
@@ -62,6 +65,7 @@ public class SysAuction {
 		listOfAuctions.add(new Auction(20.00, 80.00, new Date(System.currentTimeMillis() + 8000L),
 				(Seller) listOfUsers.get(0), new Item("Coal", condition.USED, 25), listOfAuctions.size()));
 
+		//ADDING BIDS TO AUCTIONS TESTING
 		listOfAuctions.get(2).placeBid(0.30, (Buyer) listOfUsers.get(4), new Date(System.currentTimeMillis()));
 		listOfAuctions.get(1).placeBid(1.50, (Buyer) listOfUsers.get(5), new Date(System.currentTimeMillis()));
 		listOfAuctions.get(1).placeBid(1.50, (Buyer) listOfUsers.get(4), new Date(System.currentTimeMillis()));
@@ -79,6 +83,7 @@ public class SysAuction {
 		listOfAuctions.get(5).placeBid(2.00, (Buyer) listOfUsers.get(5), new Date(System.currentTimeMillis()));
 		listOfAuctions.get(5).placeBid(2.00, (Buyer) listOfUsers.get(4), new Date(System.currentTimeMillis()));
 
+		//STARTS AUCTION THREADS TO CHECK ACTIVE AUCTIONS
 		w.start();
 		String select;
 		do {
@@ -126,6 +131,9 @@ public class SysAuction {
 		System.exit(0);
 	}
 
+	  /**
+     * deserialize is used to read in all users from .ser file and saves into listOfUsers
+     */
 	private void deserialize() {
 		try {
 			FileInputStream fileIn = new FileInputStream("users.ser");
@@ -142,6 +150,10 @@ public class SysAuction {
 			return;
 		}
 	}
+	
+	  /**
+     * Serialize is used to save all data when the program is closed for testing only the user file will be saved because auction list need current time for testing
+     */
 	private void serialize() {
 		try {
 			FileOutputStream fileOut = new FileOutputStream("users.ser");
@@ -156,6 +168,10 @@ public class SysAuction {
 
 	}
 
+	  /**
+     * login scans two user inputs username and password which is 
+     * sent to verifyLogin()
+     */
 	private void login() {
 		System.out.println("Please Enter Username: ");
 		String userName = r.nextLine();
@@ -164,6 +180,9 @@ public class SysAuction {
 		verifyLogin(userName, password);
 	}
 
+	  /**
+     * changes the refresh rate on the threads e.g. some systems might update on an hourly basis
+     */
 	private void changeInterval() {
 		System.out.println("Select the thread you wish to change the update interval on");
 		System.out.println("1. User Updates");
@@ -188,6 +207,10 @@ public class SysAuction {
 		}
 	}
 
+	 /**
+     * createAccount scans 3 user inputs userName,password and int choice for enum condition
+     *
+     */
 	private void createAccount() {
 		System.out.println("Please Enter your username: ");
 		String userName = r.nextLine();
@@ -206,7 +229,12 @@ public class SysAuction {
 			break;
 		}
 	}
-
+	
+	  /**
+     * Loops the list of users and calls check password if true user logs in and starts a new thread for Userupates
+     * 
+     * @param String userName, password
+     */
 	public void verifyLogin(String userName, String password) {
 		for (User user : listOfUsers) {
 			if (user.checkLogin(userName, password)) {
@@ -228,7 +256,11 @@ public class SysAuction {
 		}
 
 	}
-
+	
+	  /**
+     * When a seller logs in they are allowed to now startAuctions,addItems and verifyAuctions
+     * 
+     */
 	private void sellerMenu() {
 		System.out.println("=============================================================================");
 		System.out.println("         " + loggedInSeller.getUserName() + " Seller Menu");
@@ -263,6 +295,9 @@ public class SysAuction {
 		loggedInSeller = null;
 	}
 
+	  /**
+     * verify's a pending auction to allow buyers to bid on the auction
+     */
 	private void verifyAuction() {
 		boolean auctionsAvalibleToVerify = false;
 		for (Auction auction : listOfAuctions) {
@@ -283,6 +318,9 @@ public class SysAuction {
 		}
 	}
 
+	  /**
+     * Seller picks from a list of his pending items then calls auctionDetails()
+     */
 	private void startNewAuction() {
 		if (loggedInSeller.getItemsForSale().size() >= 1) {
 			System.out.println("Please Select An Item For Sale: ");
@@ -309,6 +347,9 @@ public class SysAuction {
 
 	}
 
+	  /**
+     * auctionDetails scans the users inputs on startPrice reservePrice and closing date and then creates a new Auction with the statusType of pending
+     */
 	private void auctionDetails(Item newItemAuction) {
 		System.out.println("Please enter Start Price: ");
 		System.out.println("Format 0.00");
@@ -332,6 +373,9 @@ public class SysAuction {
 		System.err.println("Auction is now pending.");
 	}
 
+	  /**
+     * Scans two inputs String itemDescription and enum condition itemCondition then creates a new item object and adds to list of user items
+     */
 	private void newSellerItem() {
 		System.out.println("Please enter Item Desc: ");
 		String itemDesc = r.nextLine();
@@ -352,6 +396,9 @@ public class SysAuction {
 		System.err.println("Item created");
 	}
 
+	  /**
+     * When a Buyer logs in they are allowed to browseAuctions, placeBid and BrowseWinnings
+     */
 	public void buyerMenu() {
 		System.out.println("=============================================================================");
 		System.out.println("         " + loggedInBuyer.getUserName() + " Buyer Menu");
@@ -391,7 +438,12 @@ public class SysAuction {
 		loggedInBuyer = null;
 
 	}
+	
 
+	  /**
+     * Displays all the active Auction's  
+     * 
+     */
 	public void browseAuctions() {
 		for (Auction auction : listOfAuctions) {
 			if (auction.getStatus().equals(statusType.ACTIVE)) {
@@ -401,6 +453,11 @@ public class SysAuction {
 		}
 	}
 
+	  /**
+     * Used for buyer to print out all the auctions that buyer has won
+     * 
+     * @param List<Auction> listOfWinnings
+     */
 	public void browseAuctions(List<Auction> listOfAuctions) {
 		System.out.println("===============================================");
 		System.out.println("                         Winnings");
@@ -410,6 +467,11 @@ public class SysAuction {
 		}
 	}
 
+	  /**
+     * Used to loop around all the active Auction's and asks the Buyer to please select an auction to bid on
+     * 
+     * @param Buyer buyer
+     */
 	public void browseAuctions(Buyer buyer) {
 		System.out.println("Please select Auction:");
 		browseAuctions();
@@ -421,7 +483,9 @@ public class SysAuction {
 		bidchoice.placeBid(amount, loggedInBuyer, new Date(System.currentTimeMillis()));
 	}
 
-	// threads
+	  /**
+     * This thread will check for updates on the user that is logged in so when an item is expires,win auction and fail auction they will be informed
+     */
 	class UserUpdates extends Thread {
 		public void run() {
 			while (userLog.isLoggedIn()) {

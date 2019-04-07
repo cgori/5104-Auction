@@ -46,6 +46,9 @@ public abstract class User implements Serializable {
     public void setLoggedIn(boolean temp) {
     	this.loggedIn=temp;
     }
+    /**
+     * Runs in UserUpdates thread to check if the user has any updates
+     */
     public boolean checkUpdates() {
     	if(this.updates.isEmpty()) {
     		return false;
@@ -53,14 +56,27 @@ public abstract class User implements Serializable {
     		return true;
     	}
     	}
+    /**
+     * When updates is not null returns list of updates to the current User logged in
+     * @return ArrayList<String> String updates
+     */
     public ArrayList<String> browseUpdates(){
     	ArrayList<String> temp = new ArrayList<String>(this.updates);
 		this.updates.clear();
 		return temp;
     }
+    /**
+     * Adds updates to the user which when logged in will be displayed
+     * @param String update information
+     */
     public void addUpdate(String update) {
     	updates.add(update);
 	}
+    /**
+     * checks this object if the paramaters are correct used to login
+     * 
+     * @param String userName, password
+     */
     public boolean checkLogin(String userName,String password) {
     	if (checkusername(userName) == true && checkPassword(password) == true) {
     		return true;
