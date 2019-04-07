@@ -1,5 +1,10 @@
 package com.company;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,30 +35,32 @@ public class SysAuction {
 	private Scanner r = new Scanner(System.in);
 	private int userInterval = 500;
 	private int auctionInterval = 200;
-	private ValidateAuction w = new ValidateAuction(); 
+	private ValidateAuction w = new ValidateAuction();
 
 //TODO CHANGE SET METHOD TO StatusType.PENDING IN CONSTRUCT AUCTION FOR LIVE SYSTEM
-	
+
 	public SysAuction() {
-		listOfUsers.add(new Seller("Callum", "Test"));
+		deserialize();
+		
+		/*listOfUsers.add(new Seller("Callum", "Test"));
 		listOfUsers.add(new Seller("Robert", "Harrison"));
 		listOfUsers.add(new Seller("Callum", "Goring"));
 		listOfUsers.add(new Seller("Feels", "Weird"));
 		listOfUsers.add(new Buyer("LOL", "xd"));
-		listOfUsers.add(new Buyer("temp", "xd"));
+		listOfUsers.add(new Buyer("temp", "xd"));*/
 
 		listOfAuctions.add(new Auction(25.00, 26.00, new Date(System.currentTimeMillis() + 35000L),
-				(Seller) listOfUsers.get(0), new Item("Car", condition.NEW ,20),listOfAuctions.size()));
+				(Seller) listOfUsers.get(0), new Item("Car", condition.NEW, 20), listOfAuctions.size()));
 		listOfAuctions.add(new Auction(15.00, 20.00, new Date(System.currentTimeMillis() + 20000L),
-				(Seller) listOfUsers.get(2), new Item("Boat", condition.NEW,21),listOfAuctions.size()));
+				(Seller) listOfUsers.get(2), new Item("Boat", condition.NEW, 21), listOfAuctions.size()));
 		listOfAuctions.add(new Auction(3.00, 10.00, new Date(System.currentTimeMillis() + 20000L),
-				(Seller) listOfUsers.get(2), new Item("Bike", condition.USED,22),listOfAuctions.size()));
+				(Seller) listOfUsers.get(2), new Item("Bike", condition.USED, 22), listOfAuctions.size()));
 		listOfAuctions.add(new Auction(1.00, 5.00, new Date(System.currentTimeMillis() + 12000L),
-				(Seller) listOfUsers.get(3), new Item("Diamonds", condition.NEW,23),listOfAuctions.size()));
-		listOfAuctions.add(new Auction(0.99, 1.00, new Date(System.currentTimeMillis() +10000L),
-				(Seller) listOfUsers.get(1), new Item("Iron", condition.NEW,24),listOfAuctions.size()));
+				(Seller) listOfUsers.get(3), new Item("Diamonds", condition.NEW, 23), listOfAuctions.size()));
+		listOfAuctions.add(new Auction(0.99, 1.00, new Date(System.currentTimeMillis() + 10000L),
+				(Seller) listOfUsers.get(1), new Item("Iron", condition.NEW, 24), listOfAuctions.size()));
 		listOfAuctions.add(new Auction(20.00, 80.00, new Date(System.currentTimeMillis() + 8000L),
-				(Seller) listOfUsers.get(0), new Item("Coal", condition.USED,25),listOfAuctions.size()));
+				(Seller) listOfUsers.get(0), new Item("Coal", condition.USED, 25), listOfAuctions.size()));
 
 		listOfAuctions.get(2).placeBid(0.30, (Buyer) listOfUsers.get(4), new Date(System.currentTimeMillis()));
 		listOfAuctions.get(1).placeBid(1.50, (Buyer) listOfUsers.get(5), new Date(System.currentTimeMillis()));
@@ -115,7 +122,38 @@ public class SysAuction {
 			}
 
 		} while (!select.equalsIgnoreCase("5"));
+		serialize();
 		System.exit(0);
+	}
+
+	private void deserialize() {
+		try {
+			FileInputStream fileIn = new FileInputStream("users.ser");
+			ObjectInputStream in = new ObjectInputStream(fileIn);
+			listOfUsers = (List<User>) in.readObject();
+			in.close();
+			fileIn.close();
+		} catch (IOException i) {
+			i.printStackTrace();
+			return;
+		} catch (ClassNotFoundException c) {
+			System.out.println("User class not found");
+			c.printStackTrace();
+			return;
+		}
+	}
+	private void serialize() {
+		try {
+			FileOutputStream fileOut = new FileOutputStream("users.ser");
+			ObjectOutputStream out = new ObjectOutputStream(fileOut);
+			out.writeObject(listOfUsers);
+			out.close();
+			fileOut.close();
+			System.out.printf("Serialized data is saved in user.ser");
+		} catch (IOException i) {
+			i.printStackTrace();
+		}
+
 	}
 
 	private void login() {
@@ -171,7 +209,7 @@ public class SysAuction {
 
 	public void verifyLogin(String userName, String password) {
 		for (User user : listOfUsers) {
-			if (user.checkLogin(userName,password)) {
+			if (user.checkLogin(userName, password)) {
 				UserUpdates updates = new UserUpdates();
 				try {
 					this.loggedInSeller = (Seller) user;
@@ -331,7 +369,7 @@ public class SysAuction {
 			case "1":
 				browseAuctions();
 				break;
-			case "2":	
+			case "2":
 				browseAuctions(loggedInBuyer);
 				break;
 			case "3":

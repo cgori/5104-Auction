@@ -1,8 +1,9 @@
 package EAuctionSystem;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class User {
+public abstract class User implements Serializable {
     protected String userName, password;
     protected boolean loggedIn=false;
     protected ArrayList<String> updates = new ArrayList<String>();
