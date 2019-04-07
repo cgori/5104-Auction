@@ -16,7 +16,11 @@ public class Auction implements Blockable{
     private int uniqueID;
 
     public Auction(double startPirce, double reservePrice, Date closingDate, Seller who, Item whichItem,int id) {
-        setStatus(statusType.PENDING);
+    	try {
+    	if(startPirce>=reservePrice) {
+    		throw new ArithmeticException("e");
+    	}else {
+        setStatus(statusType.ACTIVE);
         setStartPirce(startPirce);
         setReservePrice(reservePrice);
         setItemForSale(whichItem);
@@ -24,7 +28,10 @@ public class Auction implements Blockable{
         setClosingDate(closingDate);
         setUpperLowerInc();
         setUniqueID(id);
-
+    	}
+    	}catch(ArithmeticException e) {
+    		System.err.println("Start price > ReservePrice");
+    	}
 
     }
 	private void setUniqueID(int id) {
@@ -54,10 +61,6 @@ public class Auction implements Blockable{
     	}
     	status = statusType.EXPIRED;
     	checkWinner();
-    }
-    
-    private Bid getHighestBid(){
-    	return listOfBidders.get(listOfBidders.size()-1);
     }
 
     private void checkWinner() {
