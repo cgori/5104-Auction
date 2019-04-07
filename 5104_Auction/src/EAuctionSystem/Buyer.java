@@ -2,7 +2,7 @@ package EAuctionSystem;
 
 import java.util.ArrayList;
 
-public class Buyer extends User {
+public final class Buyer extends User {
 	private ArrayList<Auction> listOfWinnings = new ArrayList<Auction>();
 
 	public Buyer(String userName, String password) {
