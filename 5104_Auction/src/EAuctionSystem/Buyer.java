@@ -1,7 +1,6 @@
 package EAuctionSystem;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Buyer extends User {
 	private ArrayList<Auction> listOfWinnings = new ArrayList<Auction>();

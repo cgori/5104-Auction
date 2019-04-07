@@ -4,13 +4,11 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
-import java.util.stream.Stream;
 
 import EAuctionSystem.Auction;
 import EAuctionSystem.Buyer;
@@ -20,9 +18,10 @@ import EAuctionSystem.User;
 import EAuctionSystem.condition;
 import EAuctionSystem.statusType;
 
+//TODO USER VALIDATION ON INPUTS AND CONDITIONALS
+
 public class SysAuction {
 
-//	private static List<SysAuction> listOfAuctions. = new ArrayList<SysAuction>();
 	private List<Auction> listOfAuctions = Collections.synchronizedList(new ArrayList<Auction>());
 	private List<User> listOfUsers = new ArrayList<User>();
 	private Buyer loggedInBuyer;
@@ -31,9 +30,10 @@ public class SysAuction {
 	private Scanner r = new Scanner(System.in);
 	private int userInterval = 500;
 	private int auctionInterval = 200;
-	private UserUpdates updates = new UserUpdates();
-	private ValidateAuction w = new ValidateAuction();
-//TODO add Active auctions all pending due to not being verified
+	private ValidateAuction w = new ValidateAuction(); 
+
+//TODO CHANGE SET METHOD TO StatusType.PENDING IN CONSTRUCT AUCTION FOR LIVE SYSTEM
+	
 	public SysAuction() {
 		listOfUsers.add(new Seller("Callum", "Test"));
 		listOfUsers.add(new Seller("Robert", "Harrison"));
@@ -42,30 +42,39 @@ public class SysAuction {
 		listOfUsers.add(new Buyer("LOL", "xd"));
 		listOfUsers.add(new Buyer("temp", "xd"));
 
-		listOfAuctions.add(new Auction(7.50, 25.00, new Date(System.currentTimeMillis() + 123L),
-				(Seller) listOfUsers.get(0), new Item("Car", condition.NEW, 123123123), 23132));
-		listOfAuctions.add(new Auction(7.50, 25.00, new Date(System.currentTimeMillis() + 2500L),
-				(Seller) listOfUsers.get(0), new Item("Car", condition.NEW, 123123123), 23132));
-		listOfAuctions.add(new Auction(7.50, 25.00, new Date(System.currentTimeMillis() + 10000L),
-				(Seller) listOfUsers.get(0), new Item("Car", condition.NEW, 123123123), 23132));
-		listOfAuctions.add(new Auction(7.50, 25.00, new Date(System.currentTimeMillis() + 19000L),
-				(Seller) listOfUsers.get(0), new Item("Car", condition.NEW, 123123123), 23132));
-		listOfAuctions.add(new Auction(7.50, 25.00, new Date(System.currentTimeMillis() + 35000L),
-				(Seller) listOfUsers.get(0), new Item("Car", condition.NEW, 123123123), 23132));
+		listOfAuctions.add(new Auction(25.00, 26.00, new Date(System.currentTimeMillis() + 35000L),
+				(Seller) listOfUsers.get(0), new Item("Car", condition.NEW ,20),listOfAuctions.size()));
+		listOfAuctions.add(new Auction(15.00, 20.00, new Date(System.currentTimeMillis() + 20000L),
+				(Seller) listOfUsers.get(2), new Item("Boat", condition.NEW,21),listOfAuctions.size()));
+		listOfAuctions.add(new Auction(3.00, 10.00, new Date(System.currentTimeMillis() + 20000L),
+				(Seller) listOfUsers.get(2), new Item("Bike", condition.USED,22),listOfAuctions.size()));
+		listOfAuctions.add(new Auction(1.00, 5.00, new Date(System.currentTimeMillis() + 12000L),
+				(Seller) listOfUsers.get(3), new Item("Diamonds", condition.NEW,23),listOfAuctions.size()));
+		listOfAuctions.add(new Auction(0.99, 1.00, new Date(System.currentTimeMillis() +10000L),
+				(Seller) listOfUsers.get(1), new Item("Iron", condition.NEW,24),listOfAuctions.size()));
+		listOfAuctions.add(new Auction(20.00, 80.00, new Date(System.currentTimeMillis() + 8000L),
+				(Seller) listOfUsers.get(0), new Item("Coal", condition.USED,25),listOfAuctions.size()));
 
 		listOfAuctions.get(2).placeBid(0.30, (Buyer) listOfUsers.get(4), new Date(System.currentTimeMillis()));
-		listOfAuctions.get(1).placeBid(0.10, (Buyer) listOfUsers.get(4), new Date(System.currentTimeMillis()));
+		listOfAuctions.get(1).placeBid(1.50, (Buyer) listOfUsers.get(5), new Date(System.currentTimeMillis()));
+		listOfAuctions.get(1).placeBid(1.50, (Buyer) listOfUsers.get(4), new Date(System.currentTimeMillis()));
+		listOfAuctions.get(1).placeBid(1.50, (Buyer) listOfUsers.get(5), new Date(System.currentTimeMillis()));
+		listOfAuctions.get(1).placeBid(1.50, (Buyer) listOfUsers.get(4), new Date(System.currentTimeMillis()));
+		listOfAuctions.get(1).placeBid(1.50, (Buyer) listOfUsers.get(5), new Date(System.currentTimeMillis()));
+		listOfAuctions.get(5).placeBid(2.00, (Buyer) listOfUsers.get(5), new Date(System.currentTimeMillis()));
+		listOfAuctions.get(5).placeBid(2.00, (Buyer) listOfUsers.get(4), new Date(System.currentTimeMillis()));
+		listOfAuctions.get(5).placeBid(2.00, (Buyer) listOfUsers.get(5), new Date(System.currentTimeMillis()));
+		listOfAuctions.get(5).placeBid(2.00, (Buyer) listOfUsers.get(4), new Date(System.currentTimeMillis()));
+		listOfAuctions.get(5).placeBid(2.00, (Buyer) listOfUsers.get(5), new Date(System.currentTimeMillis()));
+		listOfAuctions.get(5).placeBid(2.00, (Buyer) listOfUsers.get(4), new Date(System.currentTimeMillis()));
+		listOfAuctions.get(5).placeBid(2.00, (Buyer) listOfUsers.get(5), new Date(System.currentTimeMillis()));
+		listOfAuctions.get(5).placeBid(2.00, (Buyer) listOfUsers.get(4), new Date(System.currentTimeMillis()));
+		listOfAuctions.get(5).placeBid(2.00, (Buyer) listOfUsers.get(5), new Date(System.currentTimeMillis()));
+		listOfAuctions.get(5).placeBid(2.00, (Buyer) listOfUsers.get(4), new Date(System.currentTimeMillis()));
 
-		
 		w.start();
 		String select;
-
 		do {
-			/*
-			 * Date e = new Date(); Date x = new Date(2009 - 12 - 31);
-			 * System.out.print(e.compareTo(x));
-			 */
-		
 			System.out.println("=============================================================================");
 			System.out.println("                          Guest Menu");
 			System.out.println("=============================================================================");
@@ -90,9 +99,9 @@ public class SysAuction {
 				System.out.println("1. User Updates");
 				System.out.println("2. Back");
 				select = r.nextLine();
-				
-				switch(select) {
-				
+
+				switch (select) {
+
 				case "1":
 					System.out.print("Interval (milliseconds):");
 					auctionInterval = r.nextInt();
@@ -102,9 +111,6 @@ public class SysAuction {
 				case "2":
 					break;
 				}
-			
-				
-			
 
 			}
 
@@ -119,31 +125,31 @@ public class SysAuction {
 		String password = r.nextLine();
 		verifyLogin(userName, password);
 	}
-	
+
 	private void changeInterval() {
 		System.out.println("Select the thread you wish to change the update interval on");
 		System.out.println("1. User Updates");
 		System.out.println("2. Auction Validator (requires user to be logged in)");
 		String select = r.nextLine();
-		
-		switch(select) {
+
+		switch (select) {
 		case "1":
 			System.out.print("Interval (milliseconds):");
 			auctionInterval = r.nextInt();
 			r.nextLine();
 			System.err.println("Auction Validator interval is now " + auctionInterval);
 			break;
-		
-		
+
 		case "2":
 			System.out.print("Interval (milliseconds):");
 			userInterval = r.nextInt();
 			r.nextLine();
 			System.err.println("User Update interval is now " + userInterval);
 			break;
-		
+
 		}
 	}
+
 	private void createAccount() {
 		System.out.println("Please Enter your username: ");
 		String userName = r.nextLine();
@@ -164,17 +170,18 @@ public class SysAuction {
 	}
 
 	public void verifyLogin(String userName, String password) {
-				for (User user : listOfUsers) {
-			if (user.checkusername(userName) == true && user.checkPassword(password) == true) {
+		for (User user : listOfUsers) {
+			if (user.checkLogin(userName,password)) {
+				UserUpdates updates = new UserUpdates();
 				try {
 					this.loggedInSeller = (Seller) user;
-					this.userLog = (Seller) user;
+					this.userLog = this.loggedInSeller;
 					this.userLog.setLoggedIn(true);
 					updates.start();
 					sellerMenu();
 				} catch (Exception e) {
 					this.loggedInBuyer = (Buyer) user;
-					this.userLog = (Buyer) user;
+					this.userLog = this.loggedInBuyer;
 					this.userLog.setLoggedIn(true);
 					updates.start();
 					buyerMenu();
@@ -207,10 +214,10 @@ public class SysAuction {
 			case "3":
 				verifyAuction();
 				break;
-			
-		case "4":
-			changeInterval();
-			break;
+
+			case "4":
+				changeInterval();
+				break;
 			}
 
 		} while (!select.equalsIgnoreCase("5"));
@@ -239,29 +246,29 @@ public class SysAuction {
 	}
 
 	private void startNewAuction() {
-		if(loggedInSeller.getItemsForSale().size()>=1) {
-		System.out.println("Please Select An Item For Sale: ");
-		for (Item item : loggedInSeller.getItemsForSale()) {
-			System.out.println(item.getID() + "| " + item.getDescription() + " |" + item.getitemCondition());
-		}
-		String choice = r.nextLine();
-		
-		Item newItemAuction = loggedInSeller.pickItem(Integer.parseInt(choice));
-		
-		System.out.println("dawondwadoiwandwaniowadiondwainodwaion");
-		boolean beginAuction = true;
-		for (Auction auction : listOfAuctions) {
-			if (auction.getItemForSale().equals(newItemAuction)) {
-				beginAuction = false;
+		if (loggedInSeller.getItemsForSale().size() >= 1) {
+			System.out.println("Please Select An Item For Sale: ");
+			for (Item item : loggedInSeller.getItemsForSale()) {
+				System.out.println(item.getID() + "| " + item.getDescription() + " |" + item.getitemCondition());
+			}
+			String choice = r.nextLine();
+
+			Item newItemAuction = loggedInSeller.pickItem(Integer.parseInt(choice));
+
+			System.out.println("dawondwadoiwandwaniowadiondwainodwaion");
+			boolean beginAuction = true;
+			for (Auction auction : listOfAuctions) {
+				if (auction.getItemForSale().equals(newItemAuction)) {
+					beginAuction = false;
+				}
+			}
+			if (beginAuction == true) {
+				auctionDetails(newItemAuction);
+			} else {
+				System.out.println("This item is already up for sale or sold");
 			}
 		}
-		if (beginAuction == true) {
-			auctionDetails(newItemAuction);
-		} else {
-			System.out.println("This item is already up for sale or sold");
-		}
-		}
-		
+
 	}
 
 	private void auctionDetails(Item newItemAuction) {
@@ -280,10 +287,10 @@ public class SysAuction {
 			// Parsing the String
 			closingDate = dateFormat.parse(stringClosingDate);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			System.err.println("Not a valid date format.");
 		}
-		listOfAuctions.add(new Auction(startPrice, reservePrice, closingDate, loggedInSeller, newItemAuction,listOfAuctions.size()));
+		listOfAuctions.add(new Auction(startPrice, reservePrice, closingDate, loggedInSeller, newItemAuction,
+				listOfAuctions.size()));
 		System.err.println("Auction is now pending.");
 	}
 
@@ -307,11 +314,6 @@ public class SysAuction {
 		System.err.println("Item created");
 	}
 
-//TODO fix this doesnt work when takes params on start you use start which it doesnt let me
-	// This will tell the user about updates on the account e.g. if they won an
-	// auction or lost one :P
-	
-
 	public void buyerMenu() {
 		System.out.println("=============================================================================");
 		System.out.println("         " + loggedInBuyer.getUserName() + " Buyer Menu");
@@ -329,8 +331,8 @@ public class SysAuction {
 			case "1":
 				browseAuctions();
 				break;
-			case "2":
-				browseAuctions();
+			case "2":	
+				browseAuctions(loggedInBuyer);
 				break;
 			case "3":
 				try {
@@ -340,7 +342,7 @@ public class SysAuction {
 					System.out.println(loggedInBuyer.getUserName() + ": Has no winnings");
 				}
 				break;
-			
+
 			case "4":
 				changeInterval();
 				break;
@@ -377,12 +379,11 @@ public class SysAuction {
 		Auction bidchoice = listOfAuctions.get(Integer.parseInt(choice));
 		System.out.println("Please select amount: ");
 		double amount = r.nextDouble();
+		r.nextLine();
 		bidchoice.placeBid(amount, loggedInBuyer, new Date(System.currentTimeMillis()));
 	}
-	
-	
-	//threads
-	
+
+	// threads
 	class UserUpdates extends Thread {
 		public void run() {
 			while (userLog.isLoggedIn()) {

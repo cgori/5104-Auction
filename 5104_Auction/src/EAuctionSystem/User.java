@@ -60,8 +60,11 @@ public abstract class User {
     public void addUpdate(String update) {
     	updates.add(update);
 	}
-    
-    
-    
-    
+    public boolean checkLogin(String userName,String password) {
+    	if (checkusername(userName) == true && checkPassword(password) == true) {
+    		return true;
+    	}else {
+    	return false;
+    	}
+    }
 }
