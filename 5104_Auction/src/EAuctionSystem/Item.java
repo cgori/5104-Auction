@@ -1,6 +1,6 @@
 package EAuctionSystem;
 
-public class Item {
+public final class Item {
     private String description;
     private condition itempCondition;
     private int itemID;
