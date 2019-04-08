@@ -4,7 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public abstract class User implements Serializable {
-    protected String userName, password;
+	private static final long serialVersionUID = 6267452441441564177L;
+	protected String userName, password;
     protected boolean loggedIn=false;
     protected ArrayList<String> updates = new ArrayList<String>();
     
