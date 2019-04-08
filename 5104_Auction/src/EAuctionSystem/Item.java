@@ -1,7 +1,13 @@
 package EAuctionSystem;
 
-public final class Item {
-    private String description;
+import java.io.Serializable;
+
+public final class Item implements Serializable {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6059053727748120002L;
+	private String description;
     private condition itempCondition;
     private int itemID;
 

@@ -1,10 +1,15 @@
 package EAuctionSystem;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Auction implements Blockable {
+public class Auction implements Blockable, Serializable  {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6356075445947904532L;
 	private double upperInc, lowerInc;
 	private List<Bid> listOfBidders = new ArrayList<Bid>();
 	private Item itemForSale;

@@ -1,9 +1,14 @@
 package EAuctionSystem;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Bid {
-    private Double amount;
+public class Bid implements Serializable {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4249787064268718720L;
+	private Double amount;
     private Buyer who;
     private Date when;
 

@@ -50,7 +50,7 @@ public class SysAuction {
 		listOfUsers.add(new Seller("Feels", "Weird"));
 		listOfUsers.add(new Buyer("LOL", "xd"));
 		listOfUsers.add(new Buyer("temp", "xd"));*/
-
+		
 		//LIST OF ALL AUCTIONS TESTING
 		listOfAuctions.add(new Auction(25.00, 26.00, new Date(System.currentTimeMillis() + 35000L),
 				(Seller) listOfUsers.get(0), new Item("Car", condition.NEW, 20), listOfAuctions.size()));
