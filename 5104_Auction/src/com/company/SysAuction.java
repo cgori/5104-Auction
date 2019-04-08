@@ -117,11 +117,21 @@ public class SysAuction {
 				switch (select) {
 
 				case "1":
-					System.out.print("Interval (milliseconds):");
-					auctionInterval = r.nextInt();
-					r.nextLine();
-					System.err.println("Auction Validator interval is now " + auctionInterval);
+					int userInput;
+					try {
+						System.out.print("Interval (milliseconds):");
+						userInput = r.nextInt();
+						
+					} catch (Exception e) {
+						System.out.println("Input needs to be an integer value.");
+						r.nextLine();
+						break;
+					}
+					userInterval = userInput;
+					
+					System.err.println("User Update interval is now " + userInterval);
 					break;
+					
 				case "2":
 					break;
 				}
@@ -194,18 +204,36 @@ public class SysAuction {
 		System.out.println("1. User Updates");
 		System.out.println("2. Auction Validator (requires user to be logged in)");
 		String select = r.nextLine();
-
+		int userInput;
 		switch (select) {
 		case "1":
-			System.out.print("Interval (milliseconds):");
-			auctionInterval = r.nextInt();
+			
+			try {
+				System.out.print("Interval (milliseconds):");
+				userInput = r.nextInt();
+				
+			} catch (Exception e1) {
+				System.out.println("Input needs to be an integer value.");
+				r.nextLine();
+				break;
+			}
+			
+			auctionInterval = userInput;
 			r.nextLine();
 			System.err.println("Auction Validator interval is now " + auctionInterval);
 			break;
 
 		case "2":
-			System.out.print("Interval (milliseconds):");
-			userInterval = r.nextInt();
+			try {
+				System.out.print("Interval (milliseconds):");
+				userInput = r.nextInt();
+				
+			} catch (Exception e) {
+				System.out.println("Input needs to be an integer value.");
+				r.nextLine();
+				break;
+			}
+			userInterval = userInput;
 			r.nextLine();
 			System.err.println("User Update interval is now " + userInterval);
 			break;
@@ -447,7 +475,11 @@ public class SysAuction {
 				break;
 
 			case "4":
+				
 				changeInterval();
+				
+					System.out.println("Please enter an integer value.");
+				
 				break;
 			}
 
