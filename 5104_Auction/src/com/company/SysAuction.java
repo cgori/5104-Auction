@@ -396,8 +396,8 @@ public class SysAuction {
 	private void newSellerItem() {
 		System.out.println("Please enter Item Desc: ");
 		String itemDesc = r.nextLine();
-		System.out.println("Please enter Item Condition: ");
-		System.out.println("1. New:");
+		System.out.println("Please select Item Condition: ");
+		System.out.println("1. New");
 		System.out.println("2. Used");
 		String tempCondition = r.nextLine();
 		condition itemCondition = null;
