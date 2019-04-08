@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public final class Buyer extends User {
 	/**
-	 * Buyer class 
+	 * Buyer class
 	 */
 	private ArrayList<Auction> listOfWinnings = new ArrayList<Auction>();
 
@@ -14,15 +14,16 @@ public final class Buyer extends User {
 	}
 
 	public ArrayList<Auction> browseWinnings() {
-		if(listOfWinnings.isEmpty()) {
+		if (listOfWinnings.isEmpty()) {
 			return null;
-		}else {
-		return this.listOfWinnings;
+		} else {
+			return this.listOfWinnings;
 		}
 	}
-	
+
 	public void auctionWon(Auction won) {
-		this.addUpdate("You Won! ON: "+ won.getItemForSale().getDescription() + " For: " + won.getCurrentPrice() + " When: " + won.getClosingDate());
+		this.addUpdate("You Won! ON: " + won.getItemForSale().getDescription() + " For: " + won.getCurrentPrice()
+				+ " When: " + won.getClosingDate());
 		listOfWinnings.add(won);
 	}
 

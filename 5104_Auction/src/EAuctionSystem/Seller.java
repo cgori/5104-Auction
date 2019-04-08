@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class Seller extends User {
-	/**
-	 * 
-	 */
-
 
 	private boolean blocked;
 
@@ -23,11 +19,11 @@ public final class Seller extends User {
 	}
 
 	public void setBlocked(boolean blocked) {
-		this.blocked=blocked;
+		this.blocked = blocked;
 	}
 
 	public void addItem(String desc, condition itemCondition) {
-		itemsForSale.add(new Item(desc, itemCondition,itemsForSale.size()));
+		itemsForSale.add(new Item(desc, itemCondition, itemsForSale.size()));
 	}
 
 	public Item pickItem(int choice) {
@@ -37,6 +33,7 @@ public final class Seller extends User {
 	public List<Item> getItemsForSale() {
 		return this.itemsForSale;
 	}
+
 	public void itemExpired(String update) {
 		this.addUpdate(update);
 	}

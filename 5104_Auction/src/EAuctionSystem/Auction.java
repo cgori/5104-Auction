@@ -1,11 +1,12 @@
 package EAuctionSystem;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Auction implements Blockable, Serializable  {
+public class Auction implements Blockable, Serializable {
 	/**
 	 * 
 	 */
@@ -50,7 +51,7 @@ public class Auction implements Blockable, Serializable  {
 	}
 
 	public void placeBid(double amount, Buyer who, Date when) {
-		if (amount >= this.lowerInc && amount <= this.upperInc) {
+		if (amount >= this.lowerInc && amount <= this.upperInc && this.status == statusType.ACTIVE) {
 			this.currentPrice += amount;
 			listOfBidders.add(new Bid(currentPrice, who, when));
 		} else {
@@ -59,7 +60,7 @@ public class Auction implements Blockable, Serializable  {
 	}
 
 	public void close() {
-		if (currentPrice >= reservePrice) {
+		if (currentPrice > reservePrice) {
 			System.err.println("The item " + itemForSale.getDescription() + " has sold.");
 			who.itemExpired(this.itemForSale.getDescription() + " Sold For " + this.currentPrice);
 		} else {
@@ -175,7 +176,8 @@ public class Auction implements Blockable, Serializable  {
 
 	public String toString() {
 		String temp = "|Expires: " + this.closingDate + "|Desc: " + this.itemForSale.getDescription() + "|Condition: "
-				+ this.itemForSale.getitemCondition();
+				+ this.itemForSale.getitemCondition() + "|Upperinc:" + new DecimalFormat("##.##").format(this.upperInc)
+				+ " |Lowerinc:" + new DecimalFormat("##.##").format(this.lowerInc);
 		return temp;
 	}
 
