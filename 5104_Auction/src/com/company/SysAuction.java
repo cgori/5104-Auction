@@ -334,27 +334,31 @@ public class SysAuction {
 	 * Seller picks from a list of his pending items then calls auctionDetails()
 	 */
 	private void startNewAuction() {
-		if (!loggedInSeller.isBlocked()) {
-			if (loggedInSeller.getItemsForSale().size() >= 1) {
-				System.out.println("Please Select An Item For Sale: ");
-				loggedInSeller.getItemsForSale().forEach(iloop -> System.out
-						.println(iloop.getID() + "| " + iloop.getDescription() + " |" + iloop.getitemCondition()));
-				String choice = r.nextLine();
+		if (loggedInSeller.getItemsForSale().size() >= 1) {
+			System.out.println("Please Select An Item For Sale: ");
+			
+			for (Item item : loggedInSeller.getItemsForSale()) {
+				
+				System.out.println(item.getID() + "| " + item.getDescription() + " |" + item.getitemCondition());
+			}
+			String choice = r.nextLine();
 
-				Item newItemAuction = loggedInSeller.pickItem(Integer.parseInt(choice));
-				boolean beginAuction = true;
-				if (listOfAuctions.stream().filter(y -> y.getItemForSale().equals(newItemAuction)) != null) {
+			Item newItemAuction = loggedInSeller.pickItem(Integer.parseInt(choice));
+
+			boolean beginAuction = true;
+			for (Auction auction : listOfAuctions) {
+				if (auction.getItemForSale().equals(newItemAuction)) {
 					beginAuction = false;
 				}
-				;
-				if (beginAuction == true) {
-					auctionDetails(newItemAuction);
-				} else {
-					System.out.println("This item is already up for sale or sold");
-				}
+			}
+			if (beginAuction == true) {
+				auctionDetails(newItemAuction);
+			} else {
+				System.out.println("This item is already up for sale or sold");
 			}
 		}
-	}
+
+}
 
 	/**
 	 * auctionDetails scans the users inputs on startPrice reservePrice and closing
