@@ -347,7 +347,7 @@ public class SysAuction {
 
 			boolean beginAuction = true;
 			for (Auction auction : listOfAuctions) {
-				if (auction.getItemForSale().equals(newItemAuction)) {
+				if (auction.getItemForSale().equals(newItemAuction) && (auction.getStatus() == statusType.ACTIVE) || auction.getStatus() == statusType.SOLD) {
 					beginAuction = false;
 				}
 			}
