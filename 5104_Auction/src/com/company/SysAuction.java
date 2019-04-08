@@ -31,11 +31,13 @@ public class SysAuction {
 	private List<User> listOfUsers = new ArrayList<User>();
 	private Buyer loggedInBuyer;
 	private Seller loggedInSeller;
+	private Auction auctionloop;
 	private User userLog;
 	private Scanner r = new Scanner(System.in);
 	private int userInterval = 500;
 	private int auctionInterval = 200;
 	private ValidateAuction w = new ValidateAuction();
+	private Item itemloop;
 
 //TODO CHANGE SET METHOD TO StatusType.PENDING IN CONSTRUCT AUCTION FOR LIVE SYSTEM
 
@@ -300,6 +302,7 @@ public class SysAuction {
      */
 	private void verifyAuction() {
 		boolean auctionsAvalibleToVerify = false;
+
 		for (Auction auction : listOfAuctions) {
 			if (auction.getWho().equals(loggedInSeller) && auction.getStatus() == statusType.PENDING) {
 				System.out.println(auction.getID() + "| " + auction.getItemForSale().getDescription());
@@ -324,20 +327,14 @@ public class SysAuction {
 	private void startNewAuction() {
 		if (loggedInSeller.getItemsForSale().size() >= 1) {
 			System.out.println("Please Select An Item For Sale: ");
-			for (Item item : loggedInSeller.getItemsForSale()) {
-				System.out.println(item.getID() + "| " + item.getDescription() + " |" + item.getitemCondition());
-			}
+			loggedInSeller.getItemsForSale().forEach(iloop->System.out.println(iloop.getID() + "| " + iloop.getDescription() + " |" + iloop.getitemCondition()));
 			String choice = r.nextLine();
 
 			Item newItemAuction = loggedInSeller.pickItem(Integer.parseInt(choice));
-
-			System.out.println("dawondwadoiwandwaniowadiondwainodwaion");
-			boolean beginAuction = true;
-			for (Auction auction : listOfAuctions) {
-				if (auction.getItemForSale().equals(newItemAuction)) {
-					beginAuction = false;
-				}
-			}
+			boolean beginAuction = true;			
+			if(listOfAuctions.stream().filter(y->y.getItemForSale().equals(newItemAuction)) != null) {
+				beginAuction = false;
+			};
 			if (beginAuction == true) {
 				auctionDetails(newItemAuction);
 			} else {
@@ -349,6 +346,8 @@ public class SysAuction {
 
 	  /**
      * auctionDetails scans the users inputs on startPrice reservePrice and closing date and then creates a new Auction with the statusType of pending
+     * 
+     * @param newItemAuction
      */
 	private void auctionDetails(Item newItemAuction) {
 		System.out.println("Please enter Start Price: ");
@@ -470,7 +469,7 @@ public class SysAuction {
 	  /**
      * Used to loop around all the active Auction's and asks the Buyer to please select an auction to bid on
      * 
-     * @param Buyer buyer
+     * @param Buyer object
      */
 	public void browseAuctions(Buyer buyer) {
 		System.out.println("Please select Auction:");
@@ -491,11 +490,7 @@ public class SysAuction {
 			while (userLog.isLoggedIn()) {
 				if (userLog.checkUpdates() == true) {
 					ArrayList<String> temp = userLog.browseUpdates();
-					int i = 1;
-					for (String update : temp) {
-						System.err.println("Update: " + i + ": " + update);
-						i++;
-					}
+					temp.stream().forEach(y->System.err.println("== Your item " +  y));
 				}
 				try {
 					Thread.sleep(userInterval);
@@ -506,7 +501,9 @@ public class SysAuction {
 			}
 		}
 	}
-
+	/**
+	 * ValidateAuction thread filters the list of auctions by outdated dates and sets their statustype to expired.
+	 */
 	class ValidateAuction extends Thread {
 		public void run() {
 			while (true) {

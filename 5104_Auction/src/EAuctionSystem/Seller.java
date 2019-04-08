@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class Seller extends User {
+	/**
+	 * 
+	 */
+
+
 	private boolean blocked;
 
 	private List<Item> itemsForSale = new ArrayList<Item>();
