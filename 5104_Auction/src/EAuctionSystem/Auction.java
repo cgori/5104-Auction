@@ -65,7 +65,7 @@ public class Auction implements Blockable, Serializable {
 			who.itemExpired(this.itemForSale.getDescription() + " Sold For " + this.currentPrice);
 		} else {
 			System.err.println("The item " + itemForSale.getDescription() + " has expired.");
-			who.itemExpired(this.itemForSale.getDescription() + " has expired. ==");
+			who.itemExpired(this.itemForSale.getDescription() + " has expired.");
 		}
 		status = statusType.EXPIRED;
 		checkWinner();
