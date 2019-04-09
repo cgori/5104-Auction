@@ -569,7 +569,7 @@ public class SysAuction {
 		public void run() {
 			while (true) {
 				listOfAuctions.stream().filter(y -> y.getClosingDate().before(new Date()))
-						.filter(y -> y.getStatus() != statusType.EXPIRED).forEach(y -> y.close());
+						.filter(y -> y.getStatus() != statusType.EXPIRED).filter(y -> y.getStatus() != statusType.SOLD).forEach(y -> y.close());
 				try {
 					Thread.sleep(auctionInterval);
 				} catch (InterruptedException e) {
