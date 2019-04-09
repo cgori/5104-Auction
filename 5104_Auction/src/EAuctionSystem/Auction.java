@@ -55,6 +55,7 @@ public class Auction implements Blockable, Serializable {
 			this.currentPrice += amount;
 			listOfBidders.add(new Bid(currentPrice, who, when));
 		} else {
+			throw new NullPointerException("cannot place bid:"); 
 		}
 
 	}
